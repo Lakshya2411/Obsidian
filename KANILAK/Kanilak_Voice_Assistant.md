@@ -22,10 +22,10 @@ This project outlines the steps to create a modular voice assistant in Python. T
 
 ## ✅ Prerequisites Checklist
 
-- [ ] Python 3.8+ installed
-- [ ] Pip package manager
-- [ ] Microphone connected and configured
-- [ ] Run the installation command in your terminal:
+- [x] Python 3.8+ installed
+- [x] Pip package manager
+- [x] Microphone connected and configured
+- [x] Run the installation command in your terminal:
   ```bash
   pip install pvporcupine pyaudio speechrecognition openai-whisper pyttsx3
   ```
@@ -40,53 +40,7 @@ This project outlines the steps to create a modular voice assistant in Python. T
 
 > [!NOTE] File: `wake_word.py`
 
-### Purpose
-
-Listens continuously for the keyword **"Jarvis"** using the lightweight `Porcupine` engine. Once detected, it returns `True` and releases the microphone resources.
-
-### Code
-
-```python
-# wake_word.py
-import pvporcupine
-import pyaudio
-import struct
-
-def listen_for_wake_word():
-    access_key = "YOUR_PICOVOICE_ACCESS_KEY" # <--- IMPORTANT!
-
-    handle = pvporcupine.create(access_key=access_key, keywords=['jarvis'])
-    pa = pyaudio.PyAudio()
-    
-    audio_stream = pa.open(
-        rate=handle.sample_rate,
-        channels=1,
-        format=pyaudio.paInt16,
-        input=True,
-        frames_per_buffer=handle.frame_length
-    )
-    print("Listening for 'Jarvis'...")
-
-    while True:
-        pcm = audio_stream.read(handle.frame_length)
-        pcm = struct.unpack_from("h" * handle.frame_length, pcm)
-        keyword_index = handle.process(pcm)
-
-        if keyword_index >= 0:
-            print("Wake word detected!")
-            audio_stream.close()
-            pa.terminate()
-            handle.delete()
-            return True
-```
-
-### Code Explanation
-
-- `access_key`: Replace with your **actual key**.
-- `pvporcupine.create()`: Initializes the wake word engine.
-- `pyaudio.open()`: Opens microphone stream.
-- `handle.process(pcm)`: Processes audio to detect the wake word.
-- Cleans up with `close()`, `terminate()`, and `delete()`.
+Made another .md file (see obsidian folder....)
 
 ---
 
